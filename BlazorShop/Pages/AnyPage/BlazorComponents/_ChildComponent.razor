@@ -1,0 +1,27 @@
+﻿@inject IJSRuntime _JsRuntime
+<div class="alert alert-info">@Title</div>
+<div class="alert alert-success">
+    @if (ChildContent != null)
+    {
+        <span>@ChildContent</span>
+    }
+    else
+    {
+        <span>Its Child Component</span>
+    }
+</div>
+<button class="btn btn-danger" @onclick="OnButtonClick">Click that button</button>
+<_GrandChildComponent></_GrandChildComponent>
+@code {
+    [Parameter]
+    public string Title { get; set; }
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+    [Parameter]
+    public EventCallback OnButtonClick { get; set; }
+
+    public async Task SweetAlertSuccess()
+    {
+        await _JsRuntime.InvokeVoidAsync("ShowSweetAlert", "success", "Update Successe");
+    }
+}

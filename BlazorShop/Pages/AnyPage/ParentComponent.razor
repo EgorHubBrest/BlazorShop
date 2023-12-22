@@ -1,0 +1,22 @@
+﻿@page "/anypage/parentComponent"
+<h3>ParentChild Realtion</h3>
+<CascadingValue Value="MessageForGrandChild" Name="Message">
+    <CascadingValue Value="SomeNumber" Name="Number">
+        <_ChildComponent @ref="ChildComp" Title="This title as parameter from Parent Component" OnButtonClick="ShowMessage">
+    Its text Parent Component
+</_ChildComponent>
+</CascadingValue>
+</CascadingValue>
+<p><b>@messageText</b></p>
+<_OtherChildComponent placeholder="Enter Parent"></_OtherChildComponent>
+<button class="btn btn-success m-2" @onclick="()=>ChildComp.SweetAlertSuccess()" style="width:200px">SweetAlert Success</button>
+@code {
+    private _ChildComponent ChildComp;
+    public string MessageForGrandChild = "Message from (Parent Component)";
+    public string SomeNumber = "42";
+    private string messageText { get; set; } = "";
+    void ShowMessage()
+    {
+        messageText = "Click from Child Component";
+    } 
+}

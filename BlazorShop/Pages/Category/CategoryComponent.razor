@@ -1,0 +1,93 @@
+﻿@page "/category"
+
+@inject ICategoryRepository _categoryRepository
+@inject IJSRuntime _jsRuntime
+
+<_DeleteComponentButton OnDelete="ConfirmDelete_Click" IsParentLoading="IsLoading"></_DeleteComponentButton>
+<div class="row mt-4">
+    <div class="col-6">
+        <h4 class="card-title text-primary">Category List</h4>
+    </div>
+    <div class="col-4 offset-2">
+        <a href="/category/create" class="btn btn-primary form-control">Add New Category</a>
+
+    </div>
+    <div class="col-12 py-4">
+        @if (Category.Any())
+        {
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var category in Category)
+                    {
+                        <tr>
+                            <td>@category.Name</td>
+                            <td>
+                                <NavLink href="@($"category/edit/{category.Id}")" class="btn btn-primary">Edit</NavLink>
+                                <button class="btn btn-danger" @onclick="()=>HandleDelete(category.Id)">Delete</button>
+                                </td>
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            if (IsLoading)
+            {
+                <div class="text-center">
+                    <img src="/images/Bean Eater-1s-200px.gif" />
+                </div>
+            }
+            else
+            {
+                <p>No records found.</p>
+            }
+        }
+
+    </div>
+</div>
+
+@code {
+    private IEnumerable<CategoryDTO> Category { get; set; } = new List<CategoryDTO>();
+    public bool IsLoading { get; set; }
+    private Guid DeleteCategorytId { get; set; }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+            await LoadCategory();
+    }
+    private async Task LoadCategory()
+    {
+        IsLoading = true;
+        StateHasChanged();
+        Category = await _categoryRepository.GetAll();
+        IsLoading = false;
+        StateHasChanged();
+    }
+    private void HandleDelete(Guid id)
+    {
+        DeleteCategorytId = id;
+        _jsRuntime.InvokeVoidAsync("ShowDeleteConfirmModal");
+    }
+
+    public async Task ConfirmDelete_Click(bool isConfirmed)
+    {
+        IsLoading = true;
+        if (isConfirmed && DeleteCategorytId != Guid.Empty)
+        {
+            //delete
+            await _categoryRepository.Delete(DeleteCategorytId);
+            await _jsRuntime.ToastrSuccess("Operation Succesfull");
+            await LoadCategory();
+            await _jsRuntime.InvokeVoidAsync("HideDeleteConfirmModal");
+        }
+        IsLoading = false;
+    }
+}

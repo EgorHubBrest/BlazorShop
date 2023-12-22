@@ -1,0 +1,47 @@
+﻿<div class="col-6 border p-4" @onclick="(args)=>LastSelectedName(args,Prod.Name)">
+    <h5 class="text-danger">Product Input</h5><hr />
+    <input type="checkbox" @onchange=FavoriteUpdate /> Add to Favorite<br /><br />
+    <div>
+        Name: @Prod.Name <br />
+        Show Properies: <input type="checkbox" @bind-value="Prod.IsActive" /><br />
+        @if (Prod.IsActive)
+        {
+            @foreach (var prop in Prod.MyProp)
+            {
+                <div>
+                    <a>@prop.Key-</a>
+                    <a>@prop.Value</a>
+                </div>
+
+                <br />
+            }
+        }
+    </div>
+    <div>
+        <_EditDeletButton IsActive="@Prod.IsActive">
+
+        </_EditDeletButton>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public Demo_Product Prod { get; set; }
+    [Parameter]
+    public EventCallback<bool> OnFavoriteUpdate { get; set; }
+    [Parameter]
+    public EventCallback<string> OnLastSelectedName { get; set; }
+
+
+
+    private async Task FavoriteUpdate(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        await OnFavoriteUpdate.InvokeAsync((bool)e.Value);
+    }
+
+    private async Task LastSelectedName(MouseEventArgs e, string name)
+    {
+        await OnLastSelectedName.InvokeAsync(name);
+    }
+
+}

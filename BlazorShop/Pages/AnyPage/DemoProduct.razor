@@ -1,0 +1,64 @@
+﻿@page "/anypage/demoproduct"
+<h2 class="text-dark">DemoProduct</h2>
+<p>Favorite Total : @SelectedFavoriteCount</p><br />
+<p>Last Selected Product : @SelectedName</p>
+
+<div class="row" style="background-color:azure">
+    @foreach (var prod in Products)
+    {
+        <_CardProducts Prod="@prod" OnFavoriteUpdate="@FavoriteCountUpdate" OnLastSelectedName=FavoriteName></_CardProducts>
+    }
+</div>
+
+@code {
+    List<Demo_Product> Products = new();
+    private int SelectedFavoriteCount { get; set; } = 0;
+    private string SelectedName { get; set; }
+    protected override void OnInitialized()
+    {
+        Products.Add(new()
+            {
+                Id = 1,
+                Name = "Samsung Galaxy S20",
+                IsActive = false,
+                Price = 749.99f,
+                MyProp = new List<Demo_ProductProp>()
+            {
+                new Demo_ProductProp {Id = 1, Key = "Memory", Value="128GB 256GB 1TB"},
+                new Demo_ProductProp {Id = 2, Key = "Chip", Value="SnapDragon 980"},
+                new Demo_ProductProp {Id = 2, Key = "Color", Value="Black White Blue"}
+            }
+            }
+
+        );
+
+        Products.Add(new()
+            {
+                Id = 2,
+                Name = "Iphone 15 Pro 64 GB",
+                IsActive = false,
+                Price = 800.00f,
+                MyProp = new List<Demo_ProductProp>()
+            {
+                new Demo_ProductProp {Id = 1, Key = "Memory", Value="BWM"},
+                new Demo_ProductProp {Id = 2, Key = "Chip", Value="A14 Bionic"},
+                new Demo_ProductProp {Id = 2, Key = "Color", Value="Black White"}
+            }
+            }
+
+    );
+    }
+
+    protected void FavoriteCountUpdate(bool isSelected)
+    {
+        if (isSelected)
+            SelectedFavoriteCount++;
+        else
+            SelectedFavoriteCount--;
+    }
+
+    protected void FavoriteName(string name)
+    {
+        SelectedName = name;
+    }
+}

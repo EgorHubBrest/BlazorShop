@@ -1,0 +1,169 @@
+﻿@page "/anypage/testprop"
+<h1 class="text-success">Product</h1>
+<div class="row">
+    <div class="col-6 border p-4">
+        <h3 class="text-black">Product Input</h3><hr />
+        <div>
+            Active: <input type="checkbox" @bind-value="@Product.IsActive" checked="@(Product.IsActive?"checked":null)" />
+            <br>
+        </div>
+        <div>
+            Price : <input type="number" @bind="@Product.Price" @bind:event="oninput" /><br><br>
+        </div>
+        <div>
+            Produc Properties:
+            <select @bind="selectedProp">
+                @foreach (var prop in Product.MyProp)
+                {
+                    <option value="@prop.Key">@prop.Key</option>
+                }
+
+
+            </select>
+        </div>
+        <div>
+            @foreach (var time in timeNow)
+            {
+                <li>@time</li>
+            }
+            <br>
+            <button class="btn btn-primary" @onclick="DateFunc">Click me</button>
+        </div>
+    </div>
+    <div class="col-6 border p-4">
+        <h3 class="text-black">Product Show</h3><hr />
+
+        Name : @Product.Name
+        <br>
+        IsActive : @Product.IsActive
+        <br>
+        Price : @Product.Price
+        <br>
+        This Product is : @(Product.IsActive ? "Active" : "InActive")
+        <br>
+        <br>
+        Property Selected : @selectedProp
+        <br />
+        @if (!String.IsNullOrEmpty(selectedProp))
+        {
+            <p>Property Value: @Product.MyProp.FirstOrDefault(u => u.Key == selectedProp).Value</p>
+        }
+    </div>
+</div>
+<div class="row">
+    <h2 class="text-success">Product Table</h2>
+    @*     <div class="col-4">
+    @foreach (var prod in Products)
+    {
+    <div class="p-2">
+    <input type="text" @bind="@prod.Name" @bind:event="oninput" />
+    </div>
+    }
+    </div> *@
+    @*     <div class="col-4">
+    @foreach (var prod in Products)
+    {
+    <div class="p-2">
+    <input type="text" @bind="@prod.Price" @bind:event="oninput" />
+    </div>
+    }
+    </div> *@
+    @*     <div class="col-4">
+    @foreach (var prod in Products)
+    {
+    <div class="p-2">
+    <input type="checkbox" @bind-value="@prod.IsActive" checked="@(prod.IsActive?"checked":null)" />
+    </div>
+    }
+    </div> *@
+    <table class="table table-striped">
+        <tbody>
+            @foreach (var prod in Products)
+            {
+                <tr>
+                    <td>
+                        <input type="text" @bind="@prod.Name" @bind:event="oninput" />
+                    </td>
+                    <td>
+                        <input type="text" @bind="@prod.Price" @bind:event="oninput" />
+                    </td>
+                    <td>
+                        <input type="checkbox" @bind-value="@prod.IsActive" checked="@(prod.IsActive?"checked":null)" />
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+</div>
+<div class="row">
+    <h2 class="text-black">Product Input</h2>
+    <div class="col-4">
+        @foreach (var prod in Products)
+        {
+            <div class="p-2">
+                Name: @prod.Name Price: @prod.Price is @prod.IsActive
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    private string selectedProp = "";
+    private List<DateTime> timeNow = new List<DateTime>();
+    private Demo_Product Product = new()
+        {
+            Id = 1,
+            Name = "Ipad Pro",
+            IsActive = true,
+            Price = 659.99f,
+            MyProp = new List<Demo_ProductProp>()
+            {
+                new Demo_ProductProp {Id = 1, Key = "Memory", Value="64 GB 128 GB"},
+                new Demo_ProductProp {Id = 2, Key = "Chip", Value="A 14"}
+            }
+        };
+    protected void DateFunc()
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            timeNow.Add(DateTime.Now);
+        }
+    }
+
+    List<Demo_Product> Products = new();
+    protected override void OnInitialized()
+    {
+        Products.Add(new()
+            {
+                Id = 1,
+                Name = "Samsung Galaxy S20",
+                IsActive = true,
+                Price = 749.99f,
+                MyProp = new List<Demo_ProductProp>()
+            {
+                new Demo_ProductProp {Id = 1, Key = "Car", Value="BWM"},
+                new Demo_ProductProp {Id = 2, Key = "Job", Value="Programmer"},
+                new Demo_ProductProp {Id = 2, Key = "Ability", Value="Blazor"}
+            }
+            }
+
+        );
+
+        Products.Add(new()
+            {
+                Id = 2,
+                Name = "Iphone 15 Pro 64 GB",
+                IsActive = true,
+                Price = 800.00f,
+                MyProp = new List<Demo_ProductProp>()
+            {
+                new Demo_ProductProp {Id = 1, Key = "Car", Value="BWM"},
+                new Demo_ProductProp {Id = 2, Key = "Job", Value="Programmer"},
+                new Demo_ProductProp {Id = 2, Key = "Ability", Value="Blazor"}
+            }
+            }
+
+    );
+    }
+}

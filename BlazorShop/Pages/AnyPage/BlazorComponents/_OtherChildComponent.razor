@@ -1,0 +1,14 @@
+﻿<div>
+    <h4>_OtherChildComponent</h4>
+    <input id="nametemp" @attributes="InputAttributes" placeholder="Enter Child" />
+</div>
+
+
+@code {
+    // [Parameter]
+    // public string Placeholder { get; set; } = "Enter name(Child call back)";
+    // [Parameter]
+    // public string Maxlength { get; set; } = "15";
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object> InputAttributes { get; set; } = new Dictionary<string, object>();
+}
