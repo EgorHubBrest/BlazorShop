@@ -19,7 +19,6 @@ namespace BlazorShopWeb_Api.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles =SD.Role_Customer)]
         public async Task<IActionResult> GetAll()
         {
             return Ok(await _productRepository.GetAll());

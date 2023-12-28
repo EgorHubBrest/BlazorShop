@@ -1,7 +1,11 @@
 ﻿@page "/summary"
 
+@inject IJSRuntime _jsRuntime
 @inject ILocalStorageService _localStorage
 @inject IProductService _productService
+@inject IOrderService _orderService
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
 
 @if (IsProcessing)
 {
@@ -94,9 +98,9 @@ else
                     </div>
 
 
-                <div class="form-group pt-2">
-                    <button type="submit" class="btn btn-success form-control">Checkout Now</button>
-                </div>
+                    <div class="form-group pt-2">
+                        <button type="submit" class="btn btn-success form-control">Checkout Now</button>
+                    </div>
                 </EditForm>
             </div>
         </div>
@@ -142,11 +146,31 @@ else
             Order.OrderDetails.Add(orderDetailDTO);
             Order.OrderHeader.OrderTotal += (item.Count * productPrice.Price);
         }
+        if (await _localStorage.GetItemAsync<UserDTO>(SD.Local_UserDetails) != null)
+        {
+            var userInfo = await _localStorage.GetItemAsync<UserDTO>(SD.Local_UserDetails);
+            Order.OrderHeader.UserId = userInfo.Id;
+            Order.OrderHeader.Name = userInfo.Name;
+            Order.OrderHeader.Email = userInfo.Email;
+            Order.OrderHeader.PhoneNumber = userInfo.PhoneNumber;
+        }
         IsProcessing = false;
     }
 
     private async Task HandleCheckout()
     {
+        try
+        {
+            var paymentDto = new StripePaymentDTO()
+                {
+                    Order = Order
+                };
+            var orderHeaderSaved = await _orderService.Create(paymentDto);
+        }
+        catch (Exception e)
+        {
+            await _jsRuntime.ToastrError(e.Message);
+        }
 
     }
 }
