@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BlazorShop_Models;
 
-namespace BlazorShop_DataAccess
+namespace BlazorShop_Models
 {
     public class OrderDetailDTO
     {
