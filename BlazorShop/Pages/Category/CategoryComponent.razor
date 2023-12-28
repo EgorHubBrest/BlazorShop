@@ -2,6 +2,8 @@
 
 @inject ICategoryRepository _categoryRepository
 @inject IJSRuntime _jsRuntime
+@using BlazoShop_Common
+@attribute [Authorize(Roles = SD.Role_Admin)]
 
 <_DeleteComponentButton OnDelete="ConfirmDelete_Click" IsParentLoading="IsLoading"></_DeleteComponentButton>
 <div class="row mt-4">

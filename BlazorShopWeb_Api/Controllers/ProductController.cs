@@ -1,5 +1,7 @@
 ﻿using BlazorShop_Models;
 using BlazoShop_Business.Repository.IRepository;
+using BlazoShop_Common;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,6 +19,7 @@ namespace BlazorShopWeb_Api.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles =SD.Role_Customer)]
         public async Task<IActionResult> GetAll()
         {
             return Ok(await _productRepository.GetAll());

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BlazorShop_DataAccess
+namespace BlazorShop_Models
 {
     public class OrderHeaderDTO
     {
