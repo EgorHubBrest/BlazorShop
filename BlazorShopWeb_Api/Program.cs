@@ -9,6 +9,7 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Stripe;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,7 +42,13 @@ builder.Services.AddSwaggerGen(c =>
                     }
                 });
 });
-builder.Services.AddDbContext<ApplicationDbContext>(o => o.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+{
+    options.UseNpgsql(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        sqlOptions => sqlOptions.MigrationsAssembly("BlazorShop_DataAccess")
+    );
+});
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddDefaultTokenProviders()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
@@ -73,6 +80,7 @@ builder.Services.AddAuthentication(opt =>
 });
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddScoped<ApplicationDbContext>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddCors(o => o.AddPolicy("BlazorShop",builder =>
@@ -80,6 +88,9 @@ builder.Services.AddCors(o => o.AddPolicy("BlazorShop",builder =>
     builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
 }));
 var app = builder.Build();
+
+
+StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe")["ApiKey"];
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

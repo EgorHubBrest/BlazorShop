@@ -51,7 +51,8 @@ namespace BlazorShopWeb_Api.Controllers
         [ActionName("Create")]
         public async Task<IActionResult> Create([FromBody] StripePaymentDTO paymentDTO)
         {
-            var result = _orderRepository.Create(paymentDTO.Order);
+            paymentDTO.Order.OrderHeader.OrderDate = DateTime.UtcNow;
+            var result = await _orderRepository.Create(paymentDTO.Order);
             return Ok(result);
         }
     }

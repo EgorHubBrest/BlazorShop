@@ -43,7 +43,7 @@ namespace BlazoShop_Business.Repository
                 return new OrderDTO()
                 {
                     OrderHeader = _mapper.Map<OrderHeader, OrderHeaderDTO>(obj.OrderHeader),
-                    OrderDetails = _mapper.Map<IEnumerable<OrderDetail>, IEnumerable<OrderDetailDTO>>(obj.OrderDetails).ToList(),
+                    OrderDetails = _mapper.Map<IEnumerable<OrderDetail>, IEnumerable<OrderDetailDTO>>(obj.OrderDetails).ToList()
                 };
 
             }
@@ -53,6 +53,7 @@ namespace BlazoShop_Business.Repository
             }
 
             return objDTO;
+
         }
 
         public async Task<int> Delete(int id)
@@ -138,9 +139,9 @@ namespace BlazoShop_Business.Repository
                 return false;
             }
             data.Status = status;
-            if(status == SD.Status_Shipped)
+            if (status == SD.Status_Shipped)
             {
-                data.ShippingDate = DateTime.Now;
+                data.ShippingDate = DateTime.UtcNow;
             }
             await _db.SaveChangesAsync();
             return true;

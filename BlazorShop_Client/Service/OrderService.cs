@@ -22,15 +22,16 @@ namespace BlazorShop_Client.Service
         public async Task<OrderDTO> Create(StripePaymentDTO paymentDTO)
         {
             var content = JsonConvert.SerializeObject(paymentDTO);
-            var bodyContent = new StringContent(content, Encoding.UTF8,"application/json");
-            var response = await _httpClient.PostAsync("api/order/create",bodyContent);
+            var bodyContent = new StringContent(content, Encoding.UTF8, "application/json");
+            var response = await _httpClient.PostAsync("api/order/create", bodyContent);
             string responseResult = response.Content.ReadAsStringAsync().Result;
-            if(response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode)
             {
                 var result = JsonConvert.DeserializeObject<OrderDTO>(responseResult);
                 return result;
             }
             return new OrderDTO();
+
         }
 
         public async Task<OrderDTO> Get(int orderHeaderId)
@@ -40,7 +41,6 @@ namespace BlazorShop_Client.Service
             if (response.IsSuccessStatusCode)
             {
                 var order = JsonConvert.DeserializeObject<OrderDTO>(content);
-
                 return order;
             }
             else
@@ -48,7 +48,6 @@ namespace BlazorShop_Client.Service
                 var errorModel = JsonConvert.DeserializeObject<ErrorModelDTO>(content);
                 throw new Exception(errorModel.ErrorMessage);
             }
-
         }
 
         public async Task<IEnumerable<OrderDTO>> GetAll(string? userId = null)

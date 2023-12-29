@@ -6,11 +6,12 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
-    <PackageReference Include="Npgsql" Version="8.0.1" />
+    <PackageReference Include="Npgsql" Version="8.0.0" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.0" />
-    <PackageReference Include="Syncfusion.Blazor.Grid" Version="24.1.41" />
-    <PackageReference Include="Syncfusion.Blazor.RichTextEditor" Version="24.1.41" />
-    <PackageReference Include="Syncfusion.Blazor.Themes" Version="24.1.41" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.NetTopologySuite" Version="8.0.0" />
+    <PackageReference Include="Syncfusion.Blazor.Grid" Version="24.1.43" />
+    <PackageReference Include="Syncfusion.Blazor.RichTextEditor" Version="24.1.43" />
+    <PackageReference Include="Syncfusion.Blazor.Themes" Version="24.1.43" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0" />
