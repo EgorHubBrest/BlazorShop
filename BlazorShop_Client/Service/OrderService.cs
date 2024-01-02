@@ -1,5 +1,6 @@
 ﻿using BlazorShop_Client.Service.IService;
 using BlazorShop_Models;
+using BlazoShop_Common;
 using Newtonsoft.Json;
 using System.Text;
 
@@ -62,6 +63,23 @@ namespace BlazorShop_Client.Service
             }
 
             return new List<OrderDTO>();
+        }
+
+        public async Task<OrderHeaderDTO> MarkPaymentSuccessful(OrderHeaderDTO orderHeader)
+        {
+            var content = JsonConvert.SerializeObject(orderHeader);
+            var bodyContent = new StringContent(content, Encoding.UTF8, "application/json");
+            var response = await _httpClient.PostAsync("api/order/paymentsuccessful", bodyContent);
+            string responseResult = response.Content.ReadAsStringAsync().Result;
+            if (response.IsSuccessStatusCode)
+            {
+                //My code
+                orderHeader.Status = SD.Status_Confirmed;
+                var result = JsonConvert.DeserializeObject<OrderHeaderDTO>(responseResult);
+                return result;
+            }
+            var errorModel = JsonConvert.DeserializeObject<ErrorModelDTO>(responseResult);
+            throw new Exception(errorModel.ErrorMessage);
         }
     }
 }

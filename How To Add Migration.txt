@@ -1,0 +1,3 @@
+Use this command to add migrations:
+1.dotnet ef migrations add NewMigration --project YourAssemblyName --startup-project YourWebApiCsprojName
+2.dotnet ef database update --project YourAssemblyName --startup-project YourWebApiCsprojName

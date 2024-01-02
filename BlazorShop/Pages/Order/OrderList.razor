@@ -1,0 +1,30 @@
+﻿@page "/orderList"
+@inject IOrderRepository _orderRepository
+@inject NavigationManager _navigationManager
+
+<div>
+    <h4 class="card-title text-info">Orders List</h4>
+</div>
+
+
+@code {
+    private IEnumerable<OrderHeaderDTO> OrderHeaders { get; set; } = new List<OrderHeaderDTO>();
+    private bool IsLoading { get; set; } = false;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await LoadOrders();
+        }
+    }
+    private async Task LoadOrders()
+    {
+        IsLoading = true;
+        StateHasChanged();
+        var Order = await _orderRepository.GetAll();
+        OrderHeaders = Order.Select(u=>u.OrderHeader);
+        StateHasChanged();
+        IsLoading = false;
+    }
+}

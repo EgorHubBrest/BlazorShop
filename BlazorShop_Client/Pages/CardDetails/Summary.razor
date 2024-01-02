@@ -11,7 +11,7 @@
 @if (IsProcessing)
 {
     <div style="position:fixed;top:50%;left:50%;margin-top:-50px;margin-left:-100px;">
-        <img src="images/ajax-loader.gif" />
+        <img src="images/Load.gif" />
     </div>
 }
 else
@@ -162,6 +162,7 @@ else
 
         try
         {
+            IsProcessing = true;
             var paymentDto = new StripePaymentDTO()
                 {
                     Order = Order
@@ -171,12 +172,12 @@ else
 
             var StripeSessionAndPI = result.Data.ToString().Split(';');
 
-            Order.OrderHeader.SessionId= StripeSessionAndPI[0];
-            Order.OrderHeader.PaymentIntentId= StripeSessionAndPI[1];
+            Order.OrderHeader.SessionId = StripeSessionAndPI[0];
+            Order.OrderHeader.PaymentIntentId = StripeSessionAndPI[1];
 
             var orderDTOSaved = await _orderService.Create(paymentDto);
 
-             await _localStorage.SetItemAsync(SD.Local_OrderDetails, orderDTOSaved);
+            await _localStorage.SetItemAsync(SD.Local_OrderDetails, orderDTOSaved);
 
             await _jsRuntime.InvokeVoidAsync("redirectToCheckout", StripeSessionAndPI[0]);
 
