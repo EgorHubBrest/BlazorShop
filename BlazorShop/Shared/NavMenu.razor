@@ -39,6 +39,7 @@
                 <span class="oi oi-list-rich" aria-hidden="true"></span> BlazorJs
             </NavLink>
         </div>
+        <AuthorizeView Roles="@roleAdmin">
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="/category">
                 <span class="oi oi-list-rich" aria-hidden="true"></span> Category List
@@ -49,10 +50,19 @@
                 <span class="oi oi-list-rich" aria-hidden="true"></span> Product List
             </NavLink>
         </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="/orderList">
+                    <span class="oi oi-list-rich" aria-hidden="true"></span> Order List
+                </NavLink>
+            </div>
+
+        </AuthorizeView>
     </nav>
 </div>
 
 @code {
+    private string roleAdmin = BlazoShop_Common.SD.Role_Admin;
+
     private bool collapseNavMenu = true;
 
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;

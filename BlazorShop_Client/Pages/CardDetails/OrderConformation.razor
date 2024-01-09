@@ -1,0 +1,61 @@
+﻿@page "/OrderConfirmation"
+
+@inject ILocalStorageService _localStorage
+@inject IOrderService _orderService
+
+<div class="container">
+    @if (IsProcessing)
+    {
+        <div style="position:fixed;top:50%;left:50%;margin-top:-50px;margin-left:-100px;">
+            <img src="images/Load.gif" />
+        </div>
+    }
+    else
+    {
+        @if (Order.OrderHeader.Status == SD.Status_Confirmed)
+        {
+            <div class="row mt-4 pt-4">
+                <div class="col-10 offset-1 text-center">
+                    <h2 class="text-warning">Order Confirmed</h2>
+                    <p>You order successfully  : @Order.OrderHeader.Id </p>
+                </div>
+                <div>
+                    <img src="/images/confirmed.jpg" width="100%" style="border-radius:30px" />
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="row mt-4 pt-4">
+                <div class="col-10 offset-1 text-center">
+                    <h2 class="text-danger">Order Issue!</h2>
+                    <p>Your order had payment issue please cotact us with Order ID:  @Order.OrderHeader.Id</p>
+                </div>
+                <div class="col-8 offset-2">
+                    <img src="/images/confirmed.jpg" width="100%" style="border-radius:30px;" />
+                </div>
+            </div>
+        }
+
+    }
+</div>
+
+@code {
+    private bool IsProcessing { get; set; }
+    private OrderDTO Order { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        IsProcessing = true;
+        Order = await _localStorage.GetItemAsync<OrderDTO>(SD.Local_OrderDetails);
+        var updateOrder = await _orderService.MarkPaymentSuccessful(Order.OrderHeader);
+
+        if (updateOrder.Status == SD.Status_Confirmed)
+        {
+            await _localStorage.RemoveItemAsync(SD.Local_OrderDetails);
+            await _localStorage.RemoveItemAsync(SD.ShoppingCart);
+        }
+
+        IsProcessing = false;
+    }
+}
